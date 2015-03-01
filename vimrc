@@ -140,13 +140,13 @@ if has('eval')
    endfun
 
    if has("gui_running")
-      call LoadColorScheme("wombat:twilight256:desert")
+      call LoadColorScheme("jellybeans:wombat:twilight256:desert")
    elseif &t_Co == 256
-      call LoadColorScheme("wombat:twilight256:inkpot")
+      call LoadColorScheme("jellybeans:wombat:twilight256:inkpot")
    elseif &t_Co == 88
-      call LoadColorScheme("wombat:zellner")
+      call LoadColorScheme("jellybeans:wombat:zellner")
    else
-      call LoadColorScheme("desert:darkblue:zellner")
+      call LoadColorScheme("jellybeans:desert:darkblue:zellner")
    endif
 endif
 
@@ -310,8 +310,12 @@ if has('eval')
    inoremap <buffer> <C-K> <C-R>=EmacsKill()<CR>
 endif
 
-" w!! for sudo w!
-cmap w!! w !sudo tee % >/dev/null
+" Alternate bindings for some keys stolen by emacs-isms.
+" C-c for increment (think "count") but also easily reached
+" C-b for digraphs (important for Perl 6, foreign languages and being awesome)
+noremap <C-c> <C-a>
+nnoremap <C-b> <C-k>
+inoremap <C-b> <C-k>
 
 " clear search
 "nnoremap <esc> :noh<return><esc>
@@ -389,3 +393,13 @@ if v:version >= 700
 endif
 
 set t_RV=
+
+nnoremap <silent> <Space> :exec "normal i".nr2char(getchar())."\el"<CR>
+
+" Speed options
+let g:matchparen_insert_timeout=1
+set ttimeout
+set ttimeoutlen=100
+set timeoutlen=3000
+
+au BufReadCmd *.jar,*.xpi,*.egg,*.whl call zip#Browse(expand("<amatch>"))
