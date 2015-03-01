@@ -37,7 +37,9 @@ unless(eval {symlink('', ''); 1;}) {
 }
 
 my %links = (
-	screenrc   => '.screenrc',
+	'tmux.conf' => '.tmux.conf',
+	screenrc    => '.screenrc',
+
 	ackrc      => '.ackrc',
 	toprc      => '.toprc',
 	dir_colors => '.dir_colors',
@@ -97,15 +99,6 @@ if ($contained) {
 	$prefix = substr $scriptdir, length($home);
 	($prefix) = $prefix =~ m{^\/? (.+) [^/]+ $}x;
 }
-
-chomp(my $uname = `uname -s`);
-`cc answerback.c -o answerback.$uname`;
-if ($? != 0) {
-	warn "Could not compile answerback.\n";
-} else {
-	$links{"answerback.$uname"} = "bin/answerback.$uname";
-}
-
 
 my $i = 0; # Keep track of how many links we added
 for my $file (keys %links) {
