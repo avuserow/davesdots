@@ -14,6 +14,8 @@ if [ `uname -s` = 'Darwin' ] && [ -z "${STY}" ] ; then
 	exit
 fi
 
+sudo -K
+
 # Handle non-graphical locking
 if [ -z "${DISPLAY}" ] ; then
 	if [ -z "${STY}" ] ; then # not running screen
