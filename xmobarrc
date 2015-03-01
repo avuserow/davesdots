@@ -3,8 +3,8 @@ Config { font = "xft:Monospace-9"
        , fgColor = "grey"
        , position = TopW L 90
        , lowerOnStart = True
-       , commands = [ Run Network "wlan0" ["-L","0","-H","256","--normal","#8AE234","--high","#CC0000", "-t", "Net: <rx>k/<tx>k"] 10
-                    , Run Weather "KCMI" ["-t","<tempF>F <skyCondition>","-L","60","-H","77","--normal","#8ae234","--high","#cc0000","--low","#729fcf"] 18000
+       , commands = [ Run DynNetwork ["-L","0","-H","256","--normal","#8AE234","--high","#CC0000", "-t", "Net: <rx>k/<tx>k"] 10
+                    , Run Weather "KNUQ" ["-t","<tempF>F <skyCondition>","-L","60","-H","77","--normal","#8ae234","--high","#cc0000","--low","#729fcf"] 3600
                     , Run Cpu ["-L","10","-H","50","--normal","#8AE234","--high","#CC0000"] 10
                     , Run Memory ["-t","<usedratio>%"] 10
                     , Run Swap ["-t","<usedratio>%"] 30
@@ -14,5 +14,5 @@ Config { font = "xft:Monospace-9"
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %battery% | %cpu% | Mem: %memory%/%swap% | %wlan0% | <fc=#ee9a00>%date%</fc> | %KCMI%"
+       , template = "%StdinReader% }{ %battery% | %cpu% | Mem: %memory%/%swap% | %dynnetwork% | <fc=#ee9a00>%date%</fc> | %KNUQ%"
        }
