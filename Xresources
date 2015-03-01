@@ -37,6 +37,9 @@ XTerm*color14: #34E2E2
 XTerm*color15: #EEEEEC
 
 XTerm*toolBar: false
+XTerm*charClass: 33:48,37-38:48,44-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
+XTerm*scrollTtyOutput: false
+XTerm*scrollKey: true
 
 /* UXTerm */
 UXTerm*faceSize: 9
@@ -70,6 +73,9 @@ UXTerm*color14: #34E2E2
 UXTerm*color15: #EEEEEC
 
 UXTerm*toolBar: false
+UXTerm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48
+UXTerm*scrollTtyOutput: false
+UXTerm*scrollKey: true
 
 /* URxvt */
 URxvt*font: xft:Monospace-9
