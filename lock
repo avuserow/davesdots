@@ -7,14 +7,14 @@ if [ "${SSH_TTY}" ] && [ -z "${STY}" ] ; then
 	exit 1
 fi
 
+sudo -K
+
 # Graphically locking on Macs is simple.
 # If we're not in screen, attempt to graphically lock it.
 if [ `uname -s` = 'Darwin' ] && [ -z "${STY}" ] ; then
 	/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend
 	exit
 fi
-
-sudo -K
 
 # Handle non-graphical locking
 if [ -z "${DISPLAY}" ] ; then
