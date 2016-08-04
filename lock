@@ -41,7 +41,7 @@ XSCREEN_LOCK='xscreensaver-command -lock || xlock'
 if ps -e | grep -w gdm >/dev/null 2>/dev/null ; then
 	# looks like Gnome. They probably want gnome-screensaver.
 	# start gnome-screensaver to ensure it's running
-	gnome-screensaver >/dev/null 2>/dev/null
+	gnome-screensaver >/dev/null 2>/dev/null &
 	eval $GNOME_LOCK 2>/dev/null && exit
 elif ps -e | grep -w kdm >/dev/null 2>/dev/null ; then
 	# looks like some version of KDE. They probably want kde's screensaver.
@@ -54,8 +54,8 @@ fi
 echo "Could not decide what desktop manager you are using."
 echo "Trying fallback locking."
 eval $KDE_LOCK 2>/dev/null && exit
-gnome-screensaver >/dev/null 2>/dev/null
-eval $GNOME_LOCK 2>/dev/null
+gnome-screensaver >/dev/null 2>/dev/null &
+eval $GNOME_LOCK 2>/dev/null && exit
 xscreensaver & >/dev/null 2>/dev/null
 eval $XSCREEN_LOCK 2>/dev/null && exit
 
