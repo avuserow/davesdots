@@ -36,9 +36,15 @@ fi
 # allow new sessions to be started.
 KDE_LOCK='kdesktop_lock --forcelock || krunner_lock --forcelock || /usr/libexec/kde4/krunner_lock --forcelock || /usr/lib/kde4/libexec/krunner_lock --forcelock'
 GNOME_LOCK='gnome-screensaver-command --lock'
+LIGHT_LOCK='light-locker-command --lock'
 XSCREEN_LOCK='xscreensaver-command -lock || xlock'
 
-if ps -e | grep -w gdm >/dev/null 2>/dev/null ; then
+if ps -e | grep -w lightdm >/dev/null 2>/dev/null ; then
+	# lightdm is running, probably xfce or similar.
+	# very similar to the gnome versions
+	light-locker >/dev/null 2>/dev/null &
+	eval $LIGHT_LOCK 2>/dev/null && exit
+elif ps -e | grep -w gdm >/dev/null 2>/dev/null ; then
 	# looks like Gnome. They probably want gnome-screensaver.
 	# start gnome-screensaver to ensure it's running
 	gnome-screensaver >/dev/null 2>/dev/null &
@@ -54,6 +60,8 @@ fi
 echo "Could not decide what desktop manager you are using."
 echo "Trying fallback locking."
 eval $KDE_LOCK 2>/dev/null && exit
+light-locker >/dev/null 2>/dev/null &
+eval $LIGHT_LOCK 2>/dev/null && exit
 gnome-screensaver >/dev/null 2>/dev/null &
 eval $GNOME_LOCK 2>/dev/null && exit
 xscreensaver & >/dev/null 2>/dev/null
