@@ -1,5 +1,6 @@
 /* XFT */
 Xft*dpi: 96
+/*Xft*dpi: 120*/
 Xft*antialias: true
 
 /* XTerm */
@@ -40,6 +41,11 @@ XTerm*toolBar: false
 XTerm*charClass: 33:48,37-38:48,44-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
 XTerm*scrollTtyOutput: false
 XTerm*scrollKey: true
+XTerm*saveLines: 100000
+
+XTerm*vt100.translations:	#override			\n\
+        Shift Ctrl <Key>C:	copy-selection(CLIPBOARD)	\n\
+        Shift Ctrl <Key>V:	insert-selection(CLIPBOARD)	\n
 
 /* UXTerm */
 UXTerm*faceSize: 9
@@ -76,6 +82,11 @@ UXTerm*toolBar: false
 UXTerm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48
 UXTerm*scrollTtyOutput: false
 UXTerm*scrollKey: true
+UXTerm*saveLines: 100000
+
+UXTerm*vt100.translations: #override \
+    Shift Ctrl <Key> C: copy-selection(CLIPBOARD) \n\
+    Shift Ctrl <Key> V: insert-selection(CLIPBOARD)
 
 /* URxvt */
 URxvt*font: xft:Monospace-9

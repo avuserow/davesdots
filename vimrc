@@ -397,9 +397,11 @@ set t_RV=
 nnoremap <silent> <Space> :exec "normal i".nr2char(getchar())."\el"<CR>
 
 " Speed options
-let g:matchparen_insert_timeout=1
+let g:matchparen_insert_timeout=100
 set ttimeout
 set ttimeoutlen=100
 set timeoutlen=3000
 
 au BufReadCmd *.jar,*.xpi,*.egg,*.whl call zip#Browse(expand("<amatch>"))
+
+set clipboard=unnamed
