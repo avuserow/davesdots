@@ -20,7 +20,7 @@ for dircolors in gdircolors dircolors ; do
 done
 
 # gimmie an editor, make it a nice vi clone
-for EDITOR in vimx vim elvis vile nvi vi ; do
+for EDITOR in nvim vimx vim elvis vile nvi vi ; do
 	command -v $EDITOR >/dev/null 2>&1 && break
 done
 export EDITOR
@@ -32,6 +32,12 @@ export FCEDIT
 # vimx -> vim
 if [ "${EDITOR}" = vimx ] ; then
 	alias vim=vimx
+fi
+
+# nvim -> vim
+if [ "${EDITOR}" = nvim ] ; then
+	alias vim=nvim
+	alias vimdiff='nvim -d'
 fi
 
 # aliases
