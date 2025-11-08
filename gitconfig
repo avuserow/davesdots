@@ -41,3 +41,5 @@
 	safecrlf = true
 [push]
 	default = matching
+[include]
+    path = ~/.gitconfig-local
