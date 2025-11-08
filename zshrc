@@ -14,7 +14,6 @@ esac
 
 autoload compinit; compinit -d "${HOME}/.zsh/.zcompdump-${LHOSTNAME}"
 
-autoload age
 autoload zmv
 
 if [ ${ZSH_VERSION//.} -gt 420 ] ; then
