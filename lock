@@ -31,17 +31,33 @@ if [ -z "${DISPLAY}" ] ; then
 	exit 1
 fi
 
+# if we have loginctl, this should be trivial
+if command -v loginctl >/dev/null 2>/dev/null ; then
+	loginctl lock-session && exit
+fi
+
 # Try to lock sanely on X11.
 # Certain combinations of desktop managers and locking programs
 # allow new sessions to be started.
+XDG_LOCK='xdg-screensaver lock'
 KDE_LOCK='kdesktop_lock --forcelock || krunner_lock --forcelock || /usr/libexec/kde4/krunner_lock --forcelock || /usr/lib/kde4/libexec/krunner_lock --forcelock'
 GNOME_LOCK='gnome-screensaver-command --lock'
 LIGHT_LOCK='light-locker-command --lock'
 XSCREEN_LOCK='xscreensaver-command -lock || xlock'
+XFCE_LOCK='xflock4'
+
+# First, try to use the xdg command, since it should just work
+if command -v xdg-screensaver >/dev/null 2>/dev/null ; then
+	eval $XDG_LOCK 2>/dev/null && exit
+fi
 
 if ps -e | grep -w lightdm >/dev/null 2>/dev/null ; then
 	# lightdm is running, probably xfce or similar.
 	# very similar to the gnome versions
+
+	# use either light-locker or xflock4
+	eval $XFCE_LOCK 2>/dev/null && exit
+
 	light-locker >/dev/null 2>/dev/null &
 	eval $LIGHT_LOCK 2>/dev/null && exit
 elif ps -e | grep -w gdm >/dev/null 2>/dev/null ; then
@@ -59,6 +75,7 @@ fi
 
 echo "Could not decide what desktop manager you are using."
 echo "Trying fallback locking."
+eval $XFCE_LOCK 2>/dev/null && exit
 eval $KDE_LOCK 2>/dev/null && exit
 light-locker >/dev/null 2>/dev/null &
 eval $LIGHT_LOCK 2>/dev/null && exit
