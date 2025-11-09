@@ -40,8 +40,15 @@ if [ "${EDITOR}" = nvim ] ; then
 	alias vimdiff='nvim -d'
 fi
 
+vf () {
+	local found="$("$@" | fzf +s --tac -d: --accept-nth '{1} +{2}')"
+	[ -z "$found" ] && return
+	$EDITOR $found
+}
+
 # aliases
 alias cd..='cd ..'
+alias ..='cd ..'
 
 # handles per OS aliases, fixes a few terms
 case `uname -s` in
