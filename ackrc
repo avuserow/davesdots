@@ -1,1 +1,2 @@
 --type-add=asm=.S
+--type-add=raku=.raku,.rakumod,.rakutest,.p6,.p6m,.p6l
