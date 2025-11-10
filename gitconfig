@@ -40,6 +40,21 @@
 	excludesfile = ~/.gitignore
 	safecrlf = true
 [push]
-	default = matching
+	default = current
+[init]
+	defaultBranch = main
+	templatedir = ~/.git_template
+[merge]
+	tool = nvimdiff
+	conflictstyle = zdiff3
+[mergetool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"
+[pull]
+	ff = only
+[rebase]
+	autosquash = true
+[diff]
+	algorithm = histogram
 [include]
-    path = ~/.gitconfig-local
+	# put user.name and user.email here
+	path = ~/.gitconfig-local

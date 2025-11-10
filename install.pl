@@ -83,6 +83,7 @@ my %links = (
 
 	gitconfig => '.gitconfig',
 	gitignore => '.gitignore',
+	git_template => '.git_template',
 
 	tigrc     => '.tigrc',
 
