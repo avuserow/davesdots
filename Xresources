@@ -1,14 +1,13 @@
 /* XFT */
 Xft*dpi: 96
-/*Xft*dpi: 120*/
 Xft*antialias: true
 
 /* XTerm */
 XTerm*class: UXTerm
 XTerm*utf8: 1
 
-XTerm*faceSize: 9
-XTerm*faceName: Monospace
+XTerm*faceSize: 10
+XTerm*faceName: dejavu sans mono
 
 XTerm*background: black
 XTerm*foreground: #CCCCCC
@@ -48,8 +47,8 @@ XTerm*vt100.translations:	#override			\n\
         Shift Ctrl <Key>V:	insert-selection(CLIPBOARD)	\n
 
 /* UXTerm */
-UXTerm*faceSize: 9
-UXTerm*faceName: Monospace
+UXTerm*faceSize: 10
+UXTerm*faceName: dejavu sans mono
 
 UXTerm*background: black
 UXTerm*foreground: #CCCCCC
@@ -79,7 +78,8 @@ UXTerm*color14: #34E2E2
 UXTerm*color15: #EEEEEC
 
 UXTerm*toolBar: false
-UXTerm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48
+/* UXTerm*charClass: 33:48,35:48,37:48,43:48,45-47:48,64:48,95:48,126:48,35:48 */
+UXTerm*charClass: 33:48,37-38:48,44-47:48,64:48,58:48,126:48,61:48,63:48,43:48,35:48
 UXTerm*scrollTtyOutput: false
 UXTerm*scrollKey: true
 UXTerm*saveLines: 100000
