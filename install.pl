@@ -69,6 +69,8 @@ my %links = (
 
 	shinit  => '.shinit',
 
+	'atuin-config.toml' => '.config/atuin/config.toml',
+
 	Xdefaults  => '.Xdefaults',
 	Xresources => '.Xresources',
 
