@@ -20,7 +20,7 @@ if(grep /^(?:-h|--help|-\?)$/, @ARGV) {
 install.pl: installs symbolic links from dotfile repo into your home directory
 
 Options:
-	-f          force an overwrite existing files
+	-f          force (overwrite existing files)
 	-h, -?      print this help
 
 Destination directory is "$home".
@@ -37,8 +37,9 @@ unless(eval {symlink('', ''); 1;}) {
 }
 
 my %links = (
-	'tmux.conf' => '.tmux.conf',
-	screenrc    => '.screenrc',
+	'tmux.conf'   => '.tmux.conf',
+	'tmux-layout' => 'bin/tmux-layout',
+	screenrc      => '.screenrc',
 
 	ackrc      => '.ackrc',
 	toprc      => '.toprc',
@@ -52,7 +53,6 @@ my %links = (
 	nvim     => '.config/nvim',
 
 	commonsh => '.commonsh',
-
 	inputrc  => '.inputrc',
 
 	bash          => '.bash',

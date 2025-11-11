@@ -1,0 +1,195 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use POSIX qw(ceil floor);
+
+sub checksum {
+    my $str = shift;
+
+    my $sum = 0;
+    for my $c (split //, $str) {
+        $sum = ($sum >> 1) + (($sum & 1) << 15);
+        $sum += ord $c;
+        $sum %= 65536;
+    }
+
+    return sprintf '%04x', $sum;
+}
+
+sub get_tmux_dimensions {
+    my ($active) = grep /\(active\)/, qx!tmux list-windows!;
+
+    my ($winid) = $active =~ /^(\d+):/;
+    my ($panes, $totalw, $totalh) = $active =~ /\((\d+) panes\) \[(\d+)x(\d+)\]/;
+
+    return $winid, $panes, $totalw, $totalh;
+}
+
+sub make_rows {
+    my ($rcount, $totalw, $totalh, $colindex) = @_;
+
+    my $colw = ($totalw - 1) / 2;
+    $colw = $colindex == 0 ? ceil($colw) : floor($colw);
+
+    my $rows;
+    if ($rcount <= 1) {
+        $rows = ',100';
+    } else {
+        my @rows;
+
+        my $woffset = $colindex * (ceil($totalw / 2) + 1);
+        my $usedh = 0;
+
+        for my $i (0 .. ($rcount - 1)) {
+            my $paneh = int(($totalh - $rcount + 1) / $rcount + 0.5);
+
+            if ($i == $rcount - 1) {
+                # use up all remaining height
+                $paneh = $totalh - $usedh;
+            } else {
+                $usedh += $paneh + 1;
+            }
+
+            my $hoffset = $i * ($paneh + 1);
+            push @rows, "${colw}x${paneh},$woffset,$hoffset,100";
+        }
+
+        $rows = '[' . join(',', @rows) . ']';
+    }
+}
+
+sub get_tmux_winfile {
+    my $TMP = $ENV{TEMP} || $ENV{TMP} || $ENV{TMPDIR} || '/tmp';
+    my $tmux = $ENV{TMUX} || die 'no $ENV{TMUX} ?';
+
+    my ($tmux_id) = $tmux =~ /,(\d+)$/;
+    my $path = "$TMP/tmux-windows-$tmux_id";
+
+    return $path;
+}
+
+sub get_mcount {
+    my $winid = shift;
+    my $path = get_tmux_winfile();
+
+    my %data;
+    if (-f $path) {
+        open my $fh, '<', $path or die "could not open $path: $!";
+        %data = map {chomp; split /=/, $_, 2} <$fh>;
+        close $fh;
+    }
+
+    my $mcount = $data{$winid} // 1;
+    return 0 if $mcount < 0;
+    return $mcount;
+}
+
+sub set_mcount {
+    my $winid = shift;
+    my $mcount = shift;
+
+    my $path = get_tmux_winfile();
+
+    my %data;
+    if (-f $path) {
+        open my $fh, '<', $path or die "could not open $path: $!";
+        %data = map {chomp; split /=/, $_, 2} <$fh>;
+        close $fh;
+    }
+
+    $data{$winid} = $mcount > 0 ? $mcount : 0;
+
+    open my $fh, '>', $path or die "could not open $path for writing: $!";
+    for my $k (sort keys %data) {
+        print $fh "$k=$data{$k}\n";
+    }
+    close $fh;
+}
+
+sub main {
+    my $mode = shift;
+
+    if ($mode eq 'incr-mcount') {
+        change_mcount(1);
+    } elsif ($mode eq 'decr-mcount') {
+        change_mcount(-1);
+    } elsif ($mode eq 'apply') {
+        apply_layout();
+    } else {
+        die "unknown mode: $mode\n";
+    }
+}
+
+sub change_mcount {
+    my $change = shift;
+    my ($winid, $panes, $totalw, $totalh) = get_tmux_dimensions();
+
+    my $mcount = get_mcount($winid);
+    $mcount += $change;
+    set_mcount($winid, $mcount);
+    apply_layout();
+}
+
+sub apply_layout {
+    my ($winid, $panes, $totalw, $totalh) = get_tmux_dimensions();
+
+    my $mcount = get_mcount($winid);
+    $mcount ||= $panes; # zero means "everything in one pane"
+    my $ocount = $panes - $mcount;
+
+    my $adjw = $totalw - 1; # one column is for the border
+    my $lrows = make_rows($mcount, $totalw, $totalh, 0);
+    my $rrows = make_rows($ocount, $totalw, $totalh, 1);
+
+    my $columns = join('',
+        ceil($adjw / 2), 'x', $totalh, ',0,0', $lrows,
+        ',',
+        floor($adjw / 2), 'x', $totalh, ',', ceil($adjw / 2) + 1, ',0', $rrows,
+    );
+
+    my $layout = "${totalw}x${totalh},0,0{$columns}";
+    my $checksum = checksum($layout);
+    $layout = "$checksum,$layout";
+
+    system('tmux', 'select-layout', $layout);
+}
+
+main(@ARGV);
+
+__DATA__
+
+# sub main {
+#     my @lines = qx/tmux list-windows/;
+#     @lines = grep /\(active\)/, @lines;
+#     my($panes) = $lines[0] =~ /\((\d+) panes\)/;
+#     die "no panes?" unless $panes;
+# 
+#     my $mcount = 2;
+#     my $ocount = $panes - $mcount;
+# 
+#     if ($ocount == 0) {
+#         print "$_\n" for 1 .. $mcount;
+#         exit;
+#     }
+# 
+#     my $rcount = $mcount * $ocount;
+# 
+#     my @mrows;
+#     my @orows;
+#     for my $m (1 .. $mcount) {
+#         for my $o (($mcount + 1) .. ($mcount + $ocount)) {
+#             push @mrows, $m;
+#         }
+#     }
+#     for my $o (($mcount + 1) .. ($mcount + $ocount)) {
+#         for my $m (1 .. $mcount) {
+#             push @orows, $o;
+#         }
+#     }
+# 
+#     my @rows = map {$mrows[$_] . $orows[$_]} (0 .. $#mrows);
+# 
+#     print join ' ', @rows;
+# }
