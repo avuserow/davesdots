@@ -11,7 +11,6 @@ trap clear 0
 
 # shell options
 setopt ALWAYS_TO_END          # goto end of word on completion
-#setopt AUTO_CD                # directoy command does cd
 setopt AUTO_PUSHD             # cd uses directory stack
 setopt BASH_AUTO_LIST         # list completions on second tab
 setopt CDABLE_VARS            # cd var works if $var is a directory
@@ -39,17 +38,24 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 export HISTFILE="${HOME}/.zsh/.history"
 
-# setopt SHARE_HISTORY
 setopt HIST_IGNORE_SPACE
 setopt HIST_REDUCE_BLANKS
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
+unsetopt EXTENDED_HISTORY
 
+# use the `h` command to load history entries from other shells
 alias h='fc -RI'
+
 # search history with 'hi'
 hi() {
-        print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+	print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
 }
 
-unsetopt HIST_BEEP
-unsetopt EXTENDED_HISTORY
+# if we're using xmonad on this system, track the working directory for the `auto-xterm` script
+if command -v xmonad >/dev/null 2>&1 ; then
+	autoload -U add-zsh-hook
+	add-zsh-hook -Uz chpwd () {
+		echo "$PWD" > /tmp/last-dir-$USER
+	}
+fi

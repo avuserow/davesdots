@@ -77,8 +77,9 @@ my %links = (
 	'uncrustify.cfg' => '.uncrustify.cfg',
 	'indent.pro'     => '.indent.pro',
 
-	xmobarrc    => '.xmobarrc',
-	'xmonad.hs' => '.xmonad/xmonad.hs',
+	xmobarrc     => '.xmobarrc',
+	'xmonad.hs'  => '.xmonad/xmonad.hs',
+	'auto-xterm' => 'bin/auto-xterm',
 
 	#'Wombat.xccolortheme'  => 'Library/Application Support/Xcode/Color Themes/Wombat.xccolortheme',
 #	'Wombat.dvtcolortheme' => 'Library/Developer/Xcode/UserData/FontAndColorThemes/Wombat.dvtcolortheme',

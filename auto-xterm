@@ -1,0 +1,3 @@
+#!/bin/sh
+
+uxterm -e '[ -f /tmp/last-dir-$USER ] && cd "$(cat /tmp/last-dir-$USER)"; $SHELL'
