@@ -90,7 +90,6 @@ my %links = (
 
 	tigrc     => '.tigrc',
 
-	caffeinate => 'bin/caffeinate',
 	lock       => 'bin/lock',
 
 	'git-info'            => 'bin/git-info',

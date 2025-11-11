@@ -40,6 +40,8 @@ if [ "${EDITOR}" = nvim ] ; then
 	alias vimdiff='nvim -d'
 fi
 
+# `vf` - helper for choosing a file to edit
+# main usage: vf ack 'some string'
 vf () {
 	local found="$("$@" | fzf +s --tac -d: --accept-nth '{1} +{2}')"
 	[ -z "$found" ] && return
@@ -108,11 +110,3 @@ alias df='df -h'
 alias du='du -h'
 
 alias ping='ping -c4'
-
-if command -v pagsh.openafs >/dev/null 2>&1; then
-	alias adminhat="pagsh.openafs -c 'export KRB5CCNAME=${KRB5CCNAME}_$$; kinit $USER/admin; klist -s && aklog && $SHELL; kdestroy; unlog'"
-fi
-
-if command -v todo.pl >/dev/null 2>/dev/null; then
-	alias hmtasks=todo.pl
-fi
